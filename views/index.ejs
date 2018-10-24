@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="css/chat.css" />
+  </head>
+  <body>
+    <h1>当前在线人数:<span id="count">0</span>人</h1>
+    <ul id="messages"></ul>
+    <div>
+      <input id="m" autocomplete="off" /><button onclick="sendMessage();">Send</button>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    let socket = null;
+    let news = null;
+    $(function () {
+      socket = io('http://localhost:3000/chat');
+      news = io('http://localhost:3000/news');
+      connect();
+      disconnect();
+      receiveMsg();
+    })
+    
+    function sendMessage(){
+      socket.emit('message',{
+        event:'chat_message',
+        msg:$('#m').val()
+      });
+      $('#m').val('');
+    }
+
+    function receiveMsg(){
+      socket.on('chat_message', data =>{
+        console.log('receive chat message',data);
+        if(socket.id == data.socket_id){
+          $('#messages').append($('<li>').html(`<span style="color:red;">${data.nickname}</span>: ${data.msg}`));
+        }else{
+          $('#messages').append($('<li>').text(data.nickname+': '+data.msg));
+        }
+      })
+
+      news.on('item',data=>{
+        console.log('news ',data)
+      })
+    }
+
+    function connect(){
+      socket.on('user_connect', data =>{
+        $('#messages').append($('<li style="text-align:center;color:white;background:#EFEFEF;margin-top:10px;">').text(data.nickname+' '+data.msg));
+        $('#count').text(data.count);
+      })
+    }
+
+    function disconnect(){
+      socket.on('user_disconnected', data =>{
+        $('#messages').append($('<li style="text-align:center;color:red">').text(data.nickname+' '+data.msg));
+        $('#count').text(data.count);
+      })
+    }
+    
+  </script>
+</html>
