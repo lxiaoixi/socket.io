@@ -4,7 +4,9 @@ const handleReceiveMsg = (data, socket) => {
     switch (data.event) {
         case 'chat_message':
             console.log('receive chat message: ' + JSON.stringify(data), socket.id);
-            handleSendMsg('chat_message', data, socket, false);
+
+            handleSendMsg('chat_message', data, socket, false, 'chatIo');
+            return 'send success';
             break;
         default:
             break;
