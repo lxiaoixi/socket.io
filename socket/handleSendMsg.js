@@ -1,6 +1,6 @@
 let _io = null;
 
-const initIo = {
+const initSendIo = {
 
     chatIo: null,
     newsIo: null,
@@ -14,7 +14,7 @@ const initIo = {
 
 // 发送消息
 const handleSendMsg = (event, data, socket, isBroad, io_namespace) => {
-    let _io = initIo[io_namespace];
+    let _io = initSendIo[io_namespace];
     data.socket_id = socket.id; // socketid 唯一标识一个客户
     data.nickname = socket.nickname || '';
     console.log(data);
@@ -28,5 +28,5 @@ const handleSendMsg = (event, data, socket, isBroad, io_namespace) => {
 
 module.exports = {
     handleSendMsg,
-    initIo
+    initSendIo
 }

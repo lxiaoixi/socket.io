@@ -1,5 +1,5 @@
 const { handleReceiveMsg } = require('./handleReceiveMsg');
-const { initIo, handleSendMsg } = require('./handleSendMsg');
+const { initSendIo, handleSendMsg } = require('./handleSendMsg');
 const { getName } = require('../config/generateName');
 let count = 0; // 统计在线人数，连接加1断开减1
 
@@ -20,7 +20,8 @@ const chatSocketInit = (io) => {
         io
         .of('/chat') //指定namespace
         .on('connection', socket => {
-
+            let handshake = socket.handshake;
+            console.log('handshake is ', handshake); // 可获取客户端传过来的参数
             chatSocketObj.connectHandler(socket);
 
             // 监听socket断开连接事件
@@ -30,8 +31,8 @@ const chatSocketInit = (io) => {
 
         })
 
-    // 初始化chat namespace发送模块
-    initIo.initChatIo(chat);
+    // 初始化chat namespace的发送模块
+    initSendIo.initChatIo(chat);
 }
 
 // news namespace
@@ -47,7 +48,7 @@ const newsSocketInit = (io) => {
             })
         });
     // 初始化news namespace发送模块
-    initIo.initNewsIo(news);
+    initSendIo.initNewsIo(news);
 }
 
 const chatSocketObj = {

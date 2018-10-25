@@ -57,6 +57,56 @@
 
 ```
 
+## handshake 
+
+> 可通过handshake 来获取客户端在连接时传的参数。
+
+client 端 两种传参方式：
+
+* With query parameters
+
+```
+let socket = io('http://localhost:3000/chat?name=xiaoxi');
+```
+
+* With query option
+
+```
+let socket = io('http://localhost:3000/chat',{
+    query: {
+        name: 'xiaoxi'
+    }
+});
+```
+
+* With extraHeaders 请求头
+
+```
+let socket = io('http://localhost:3000/chat',{
+    transportOptions: {
+        polling: {
+            extraHeaders: {
+                'x-clientid': 'abc'
+            }
+        }
+    }
+});
+
+```
+
+服务端通过`handshake`获取参数：
+
+```
+    // 获取请求参数
+    let handshake = socket.handshake;
+    let name = handshake.query.name;
+    
+    // 获取请求头
+    let clientId = handshake.headers['x-clientid'];
+
+```
+
+
 ## socket多路复用（namespace和room）
 
 > 每个`socket`实例会属于某一个`room`,如果没有指定，那么会有一个`default`的`room`。每个`room`又会属于某个`namespace`，如果没有指定，那么就是默认的`namespace /`。最后`socketio`拥有所有的`namespace`。一个`namespace`可以有多个`room`,一个`room`可以有多个`socket`实例。

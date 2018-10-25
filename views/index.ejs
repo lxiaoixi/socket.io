@@ -27,6 +27,7 @@
 
     function chatSocketInit(){
       chat_socket = io('http://localhost:3000/chat');
+      // chat_socket = io('http://localhost:3000/chat?name=xiaoxi');
       chatSocketObj.connect();
       chatSocketObj.disconnect();
       chatSocketObj.receiveMsg();
