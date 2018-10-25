@@ -1,6 +1,6 @@
 const { handleReceiveMsg } = require('./handleReceiveMsg');
 const { initSendIo, handleSendMsg } = require('./handleSendMsg');
-const { getName } = require('../config/generateName');
+const { getName } = require('../util/generateName');
 let count = 0; // 统计在线人数，连接加1断开减1
 
 // 初始化socket
