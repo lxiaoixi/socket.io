@@ -16,28 +16,30 @@ const socketInit = (server) => {
 
 // chat namespace
 const chatSocketInit = (io) => {
-    const chat =
-        io
+
+    const chatIo = io
         .of('/chat') //指定namespace
         .on('connection', socket => {
             let handshake = socket.handshake;
             console.log('handshake is ', handshake); // 可获取客户端传过来的参数
+            // chatSocket连接事件处理
             chatSocketObj.connectHandler(socket);
 
             // 监听socket断开连接事件
             socket.on('disconnect', () => {
+                // socket 断开连接事件处理
                 chatSocketObj.disconnectHandler(socket, io);
             })
 
         })
 
     // 初始化chat namespace的发送模块
-    initSendIo.initChatIo(chat);
+    initSendIo.initChatIo(chatIo);
 }
 
 // news namespace
 const newsSocketInit = (io) => {
-    const news = io
+    const newsIo = io
         .of('/news')
         .on('connection', function(socket) {
             console.log('this is news namespace');
@@ -47,8 +49,9 @@ const newsSocketInit = (io) => {
                 newsSocketObj.disconnectHandler(socket);
             })
         });
+
     // 初始化news namespace发送模块
-    initSendIo.initNewsIo(news);
+    initSendIo.initNewsIo(newsIo);
 }
 
 const chatSocketObj = {

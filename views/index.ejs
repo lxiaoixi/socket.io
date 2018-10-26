@@ -39,17 +39,6 @@
     }
     
     let chatSocketObj = {
-      receiveMsg(){
-        chat_socket.on('chat_message', data =>{
-          console.log('receive chat message',data);
-          if(chat_socket.id == data.socket_id){
-            $('#messages').append($('<li>').html(`<span style="color:red;">${data.nickname}</span>: ${data.msg}`));
-          }else{
-            $('#messages').append($('<li>').text(data.nickname+': '+data.msg));
-          }
-        })
-      },
-
       connect(){
         chat_socket.on('user_connect', data =>{
           $('#messages').append($('<li style="text-align:center;color:white;background:#EFEFEF;margin-top:10px;">').text(data.nickname+' '+data.msg));
@@ -61,6 +50,16 @@
         chat_socket.on('user_disconnected', data =>{
           $('#messages').append($('<li style="text-align:center;color:red">').text(data.nickname+' '+data.msg));
           $('#count').text(data.count);
+        })
+      },
+      receiveMsg(){
+        chat_socket.on('chat_message', data =>{
+          console.log('receive chat message',data);
+          if(chat_socket.id == data.socket_id){
+            $('#messages').append($('<li>').html(`<span style="color:red;">${data.nickname}</span>: ${data.msg}`));
+          }else{
+            $('#messages').append($('<li>').text(data.nickname+': '+data.msg));
+          }
         })
       },
 
