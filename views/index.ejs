@@ -68,8 +68,8 @@
         chat_socket.emit('message',{
           event:'chat_message',
           msg:$('#m').val()
-        },data => {
-          console.log(data);
+        }, result => {
+          console.log(result);
         });
         $('#m').val('');
       }
