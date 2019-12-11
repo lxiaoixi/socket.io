@@ -16,7 +16,7 @@
     var http = require('http');
     var server = http.createServer(app);
     
-    const io = require('socket.io')(server);
+    const io = require('socket.io')(server, [options]);
 
     io.on('connection', function(socket){
         console.log('a user connected');
@@ -40,7 +40,7 @@
 ```
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
+        var socket = io(url, [options]);
 
         // 监听事件 socket.on(eventName,callback(data))
         socket.on('user_connect', data =>{
@@ -183,6 +183,40 @@ let socket = io('http://localhost:3000/chat',{
 ```
 
 > `io.of('namespace').in('room')`   `namespace`用`of`指定，`room`用`in/to`指定.
+
+## 同时指定namespace和服务端path
+
+```
+服务端socket连接地址, 指定socket的path为'/socket'  http://127.0.0.1:5021/socket
+
+const io = require('socket.io')(server, {
+  path: '/socket'
+});
+
+// Socket namespace :/chat
+var chat = io
+        .of('/chat')
+        .on('connection', function (socket) {
+            socket.emit('a message', {
+                that: 'only',
+                '/chat': 'will get'
+            });
+            chat.emit('a message', {
+                everyone: 'in',
+                '/chat': 'will get'
+            });
+        });
+
+客户端在连接服务端时，指定namespace为chat
+const socket = io('http://127.0.0.1:5021/chat', {
+  path: '/socket'
+});
+
+
+// the socket connects to the chat namespace, with the custom path socket.
+```
+
+
 
 ## 目前项目实现的功能
 
